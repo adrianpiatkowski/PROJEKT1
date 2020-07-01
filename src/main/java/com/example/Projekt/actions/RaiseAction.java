@@ -2,8 +2,6 @@ package com.example.Projekt.actions;
 
 
 public class RaiseAction extends Action {
-
-
     public RaiseAction(int amount) {
         super("Raise", "raises", amount);
     }
@@ -12,5 +10,4 @@ public class RaiseAction extends Action {
     public String toString() {
         return String.format("Raise(%d)", getAmount());
     }
-    
 }

@@ -96,29 +96,29 @@ public class Main  {
 
     public static void main(String[] args) {
 
-
-        int liczbaGraczy =0;
-        List<Gracz> imie = new LinkedList<>();
-        String imie2;
-
-        System.out.println("Texas Hold'em poker");
-        System.out.println("Podaj liczbę graczy");
-        liczbaGraczy = scanner.nextInt();
-
-        for (int gracze = 0; gracze < liczbaGraczy; gracze++) {
-                System.out.println("Podaj imię gracza");
-                imie2 = scanner.next();
-                imie.add(new Gracz(imie2,500));
-        }
-
-        table = new Stol( BIG_BLIND);
-
-        for (Gracz player : imie) {
-            table.addPlayer(player);
-        }
-
-        table.run();
-//        doTestow();
+//
+//        int liczbaGraczy =0;
+//        List<Gracz> imie = new LinkedList<>();
+//        String imie2;
+//
+//        System.out.println("Texas Hold'em poker");
+//        System.out.println("Podaj liczbę graczy");
+//        liczbaGraczy = scanner.nextInt();
+//
+//        for (int gracze = 0; gracze < liczbaGraczy; gracze++) {
+//                System.out.println("Podaj imię gracza");
+//                imie2 = scanner.next();
+//                imie.add(new Gracz(imie2,500));
+//        }
+//
+//        table = new Stol( BIG_BLIND);
+//
+//        for (Gracz player : imie) {
+//            table.addPlayer(player);
+//        }
+//
+//        table.run();
+        doTestow();
 
 
 
@@ -136,10 +136,12 @@ public class Main  {
 
         players = new LinkedHashMap<String, Gracz>();
         Set<Gracz> gracze222 = new HashSet<>();
-        Gracz gracz1 = new Gracz("Adi", STARTING_CASH);
-        Gracz gracz2= new Gracz("Joe", STARTING_CASH);
+        Gracz gracz1 = new Gracz("Adi", STARTING_CASH,"Ja");
+        Gracz gracz2= new Gracz("Joe", STARTING_CASH,"ja");
+        Gracz gracz3= new Gracz("Ebeee", STARTING_CASH, "ja");
         gracze222.add(gracz1);
         gracze222.add(gracz2);
+        gracze222.add(gracz3);
 
         table = new Stol( BIG_BLIND);
         for (Gracz player : gracze222) {

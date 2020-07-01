@@ -1,63 +1,29 @@
 package com.example.Projekt.rozgrywka;
 
 public class Uklady {
-
     private static final int NO_OF_RANKINGS  = 6;
-
-
     private static final int MAX_NO_OF_PAIRS = 2;
-
-
     private static final int[] RANKING_FACTORS = {371293, 28561, 2197, 169, 13, 1};
-
     private WartoscTyp typ;
-
     private int value = 0;
-
-
     private final Karta[] cards;
-
     private int[] listaFigur = new int[Karta.LICZBA_FIGUR];
-
-
     private int[] listaKolory = new int[Karta.LICZBA_KOLOROW];
-
-
     private int liczbaPar = 0;
-
-
     private int[] pary = new int[MAX_NO_OF_PAIRS];
-
-
     private int flushSuit = -1;
-
-
     private int flushRank = -1;
-
-
     private int straightRank = -1;
-
-
     private boolean wheelingAce = false;
-
-
     private int tripleRank = -1;
-
-
     private int quadRank = -1;
-
-
     private int[] rankings = new int[NO_OF_RANKINGS];
-
-
     public Uklady(KartyGracza kartyGracza ) {
         cards = kartyGracza.getCards();
-
         calculateDistributions();
         findStraight();
         findFlush();
         findDuplicates();
-
         boolean isSpecialValue =
                 (isStraightFlush() ||
                         isFourOfAKind()   ||
@@ -70,32 +36,22 @@ public class Uklady {
         if (!isSpecialValue) {
             calculateHighCard();
         }
-
-
         for (int i = 0; i < NO_OF_RANKINGS; i++) {
             value += rankings[i] * RANKING_FACTORS[i];
         }
     }
-
-
     public WartoscTyp getType() {
         return typ;
     }
-
-
     public int getValue() {
         return value;
     }
-
-
     private void calculateDistributions() {
         for (Karta card : cards) {
             listaFigur[card.getFigura()]++;
             listaKolory[card.getKolor()]++;
         }
     }
-
-
     private void findFlush() {
         for (int i = 0; i < Karta.LICZBA_KOLOROW; i++) {
             if (listaKolory[i] >= 5) {
@@ -112,8 +68,6 @@ public class Uklady {
             }
         }
     }
-
-
     private void findStraight() {
         boolean inStraight = false;
         int rank = -1;
@@ -136,14 +90,11 @@ public class Uklady {
                 }
             }
         }
-
         if ((count == 4) && (rank == Karta.FIVE) && (listaFigur[Karta.ACE] > 0)) {
             wheelingAce = true;
             straightRank = rank;
         }
     }
-
-
     private void findDuplicates() {
 
         for (int i = Karta.LICZBA_FIGUR - 1; i >= 0 ; i--) {
@@ -158,8 +109,6 @@ public class Uklady {
             }
         }
     }
-
-
     private void calculateHighCard() {
         typ = WartoscTyp.HIGH_CARD;
         rankings[0] = typ.getValue();
@@ -172,8 +121,6 @@ public class Uklady {
             }
         }
     }
-
-
     private boolean isOnePair() {
         if (liczbaPar == 1) {
             typ = WartoscTyp.ONE_PAIR;
@@ -198,18 +145,14 @@ public class Uklady {
             return false;
         }
     }
-
-
     private boolean isTwoPairs() {
         if (liczbaPar == 2) {
             typ = WartoscTyp.TWO_PAIRS;
             rankings[0] = typ.getValue();
-
             int highRank = pary[0];
             int lowRank  = pary[1];
             rankings[1] = highRank;
             rankings[2] = lowRank;
-
             for (Karta card : cards) {
                 int rank = card.getFigura();
                 if ((rank != highRank) && (rank != lowRank)) {
@@ -222,21 +165,17 @@ public class Uklady {
             return false;
         }
     }
-
-
     private boolean isThreeOfAKind() {
         if (tripleRank != -1) {
             typ = WartoscTyp.THREE_OF_A_KIND;
             rankings[0] = typ.getValue();
             rankings[1] = tripleRank;
-
             int index = 2;
             for (Karta card : cards) {
                 int rank = card.getFigura();
                 if (rank != tripleRank) {
                     rankings[index++] = rank;
                     if (index > 3) {
-
                         break;
                     }
                 }
@@ -246,8 +185,6 @@ public class Uklady {
             return false;
         }
     }
-
-
     private boolean isStraight() {
         if (straightRank != -1) {
             typ = WartoscTyp.STRAIGHT;
@@ -258,8 +195,6 @@ public class Uklady {
             return false;
         }
     }
-
-
     private boolean isFlush() {
         if (flushSuit != -1) {
             typ = WartoscTyp.FLUSH;
@@ -282,8 +217,6 @@ public class Uklady {
             return false;
         }
     }
-
-
     private boolean isFullHouse() {
         if ((tripleRank != -1) && (liczbaPar > 0)) {
             typ = WartoscTyp.FULL_HOUSE;
@@ -295,13 +228,11 @@ public class Uklady {
             return false;
         }
     }
-
     private boolean isFourOfAKind() {
         if (quadRank != -1) {
             typ = WartoscTyp.FOUR_OF_A_KIND;
             rankings[0] = typ.getValue();
             rankings[1] = quadRank;
-
             int index = 2;
             for (Karta card : cards) {
                 int rank = card.getFigura();
@@ -315,8 +246,6 @@ public class Uklady {
             return false;
         }
     }
-
-
     private boolean isStraightFlush() {
         if (straightRank != -1 && flushRank == straightRank) {
 
@@ -356,7 +285,6 @@ public class Uklady {
                 lastRank = rank;
                 lastSuit = suit;
             }
-
             if (inStraight >= 5 && inFlush >= 5) {
                 if (straightRank == Karta.ACE) {
 

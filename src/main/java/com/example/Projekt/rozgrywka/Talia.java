@@ -5,19 +5,10 @@ import java.util.List;
 import java.util.Random;
 
 public class Talia {
-
     private static final int LICZBA_KART = Karta.LICZBA_FIGUR * Karta.LICZBA_KOLOROW;
-
-
     private Karta[] cards;
-
-
     private int nextCardIndex = 0;
-
-
     private Random random = new Random();
-
-
     public Talia() {
         cards = new Karta[LICZBA_KART];
         int index = 0;
@@ -27,10 +18,6 @@ public class Talia {
             }
         }
     }
-
-
-
-
     public void shuffle() {
         for (int oldIndex = 0; oldIndex < LICZBA_KART; oldIndex++) {
             int newIndex = random.nextInt(LICZBA_KART);
@@ -40,21 +27,15 @@ public class Talia {
         }
         nextCardIndex = 0;
     }
-
-
     public void reset() {
         nextCardIndex = 0;
     }
-
-
     public Karta deal() {
         if (nextCardIndex + 1 >= LICZBA_KART) {
             throw new IllegalStateException("No cards left in deck");
         }
         return cards[nextCardIndex++];
     }
-
-
     public List<Karta> deal(int liczbaKart) {
         if (liczbaKart < 1) {
             throw new IllegalArgumentException("noOfCards < 1");

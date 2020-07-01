@@ -1,42 +1,27 @@
 package com.example.Projekt.rozgrywka;
 
 public class Wartosc implements Comparable<Wartosc> {
-
     private final KartyGracza kartyGracza;
-
-
     private final WartoscTyp typ;
-
-
     private final int wartosc;
-
-
     public Wartosc(KartyGracza kartyGracza) {
         this.kartyGracza = kartyGracza;
         Uklady uklady = new Uklady(kartyGracza);
         typ = uklady.getType();
         wartosc = uklady.getValue();
     }
-
-
     public KartyGracza getKartyGracza() {
         return kartyGracza;
     }
-
     public WartoscTyp getType() {
         return typ;
     }
-
-
     public String getDescription() {
         return typ.getDescription();
     }
-
-
     public int getWartosc() {
         return wartosc;
     }
-
 
     @Override
     public int hashCode() {
@@ -62,7 +47,6 @@ public class Wartosc implements Comparable<Wartosc> {
             return 0;
         }
     }
-
 
     @Override
     public String toString() {
