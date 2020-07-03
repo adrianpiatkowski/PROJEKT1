@@ -134,11 +134,11 @@ public class Main  {
 
 
 
-        players = new LinkedHashMap<String, Gracz>();
+        players = new LinkedHashMap<>();
         Set<Gracz> gracze222 = new HashSet<>();
         Gracz gracz1 = new Gracz("Adi", STARTING_CASH,"Ja");
         Gracz gracz2= new Gracz("Joe", STARTING_CASH,"ja");
-        Gracz gracz3= new Gracz("Ebeee", STARTING_CASH, "ja");
+        Gracz gracz3= new Gracz("Edward", STARTING_CASH, "ja");
         gracze222.add(gracz1);
         gracze222.add(gracz2);
         gracze222.add(gracz3);

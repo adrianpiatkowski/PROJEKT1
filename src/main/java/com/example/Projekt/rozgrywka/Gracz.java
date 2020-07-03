@@ -18,10 +18,7 @@ public class Gracz {
         this.name = name;
         this.cash = cash;
         this.ifBot = ifBot;
-
-
         kartyGracza = new KartyGracza();
-
         resetHand();
     }
     public void resetHand() {
