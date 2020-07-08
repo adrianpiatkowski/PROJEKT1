@@ -14,8 +14,9 @@ public class Gracz {
     private boolean maKarty;
     private Action action;
     private int bet;
-//    private PlayerAction playerAction;
     private int choosenAction = -1;
+    public String wyswietlanieKart;
+    public int betRiseValue = -1;
 
     public Gracz(String name, int cash, String ifBot) {
         this.name = name;
@@ -46,14 +47,13 @@ public class Gracz {
                 throw new IllegalArgumentException("Invalid number of cards");
             }
         }
-        String wyswietlanieKart = "====" +
+        wyswietlanieKart = "====" +
                 name +
                 "'s cards: \t" +
                 kartyGracza +
                 "====\n";
         System.out.println(wyswietlanieKart);
     }
-    public boolean maKarty() { return maKarty;}
     public String getName() {
         return name;
     }
@@ -104,7 +104,6 @@ public class Gracz {
         clone.action = action;
         return clone;
     }
-
     @Override
     public String toString() {
         return name;

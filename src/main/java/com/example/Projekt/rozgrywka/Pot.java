@@ -25,7 +25,6 @@ public class Pot {
         contributors.add(player);
     }
     public boolean hasContributer(Gracz player) {
-        //albo equals dla gracza
         for (Gracz gracz : contributors) {
             if(gracz.getName().equals(player.getName())) {
                 return Boolean.TRUE;

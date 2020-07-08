@@ -2,22 +2,21 @@
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
-    <title>Texas Hold'em </title>
+    <title>Texas Hold'em</title>
 </head>
 <body bgcolor="#99CC30">
 <hr>
 <div style="text-align: center;">
         <span style="font-family: Arial; font-size: xx-large; color: #6C6C6C; ">
-            <p th:text="${welcome}"></p><br>
-            <p th:text="${listOfPlayers}"></p><br>
-            <p th:text="${chooseAction}"></p><br>
+            <p th:text="${turn}"></p><br>
+            <p th:text="${turnCards}"></p><br>
             <p th:text="${playerCards}"></p><br>
             <p th:if="${currentAction}!=null" th:text="${currentAction}"></p><br>
             <p th:text="${whatToDo}"></p><br>
-            <form method="post" th:action="@{/flop}" th:object="${userRequestFlop}" >
+            <form method="post" th:action="@{/river}" th:object="${userRequestRiver}" >
                 <input  type="text" th:field="*{choosenAction}" placeholder="selected action">
                 <input  type="text" th:field="*{valueRiseBet}" placeholder="enter bet value">
-                <input type="submit" th:value="select" name="Select" style="width: 150px; background-color: cornflowerblue">
+                <input type="submit" th:value="select2" name="Select" style="width: 150px; background-color: cornflowerblue">
             </form>
             <hr>
         </span>

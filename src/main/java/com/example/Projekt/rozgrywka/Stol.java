@@ -12,7 +12,7 @@ public class Stol {
     Pattern pattern = Pattern.compile("Raise(.*)");
     Pattern patternBET = Pattern.compile("Bet(.*)");
     public Scanner scanner = new Scanner(System.in);
-    private  Action poprzedniaAkcja;
+    private  Action poprzedniaAkcja = new ContinueAction();
     private static final int MAX_RAISES = 3;
     private static final boolean ALWAYS_CALL_SHOWDOWN = false;
     private final int bigBlind;
@@ -28,11 +28,14 @@ public class Stol {
     private Gracz lastBettor;
     private int stawka =0;
     private final List<Pot> pots;
-
-
     public int akcjaGracza;
     public int wartoscRiseBet;
     public String message;
+    public String messageWhatCanIDo;
+    public String messageWinner;
+    public String messageHand;
+    public List<String> messageWinnerList = new ArrayList();
+    public List<String> messageHandList = new ArrayList();
 
     public Stol( int bigBlind) {
 
@@ -75,7 +78,6 @@ public class Stol {
     }
     private void playHand() {
         resetHand();
-
         // Small blind.
         if (activePlayers.size() > 2) {
             rotateActor();
@@ -135,7 +137,7 @@ public class Stol {
             }
         }
     }
-    private void resetHand() {
+    public void resetHand() {
         board.clear();
         pots.clear();
         activePlayers.clear();
@@ -154,32 +156,32 @@ public class Stol {
         minBet = bigBlind;
         bet = minBet;
     }
-    private void rotateActor() {
+    public void rotateActor() {
         actorPosition = (actorPosition + 1) % activePlayers.size();
         actor = activePlayers.get(actorPosition);
     }
-    private void postSmallBlind() {
+    public void postSmallBlind() {
         final int smallBlind = bigBlind / 2;
         actor.postSmallBlind(smallBlind);
         contributePot(smallBlind);
     }
-    private void postBigBlind() {
+    public void postBigBlind() {
         actor.postBigBlind(bigBlind);
         contributePot(bigBlind);
 
     }
-    private void dealHoleCards() {
+    public void dealHoleCards() {
         for (Gracz player : activePlayers) {
             player.setCards(deck.deal(2));
         }
         System.out.println();
     }
-    private void dealCommunityCards(int noOfCards) {
+    public void dealCommunityCards(int noOfCards) {
         for (int i = 0; i < noOfCards; i++) {
             board.add(deck.deal());
         }
     }
-    private void doBettingRound() {
+    public void doBettingRound() {
         int playersToAct = activePlayers.size();
         if (board.size() == 0) {
             bet = bigBlind;
@@ -278,9 +280,7 @@ public class Stol {
                         playersToAct = 0;
                     }
                 }
-
             }
-
 //            actor.setAction(action);
             System.out.println( "Total pot on the table:"+ getTotalPot());
             poprzedniaAkcja = actor.getAction() ;
@@ -290,17 +290,12 @@ public class Stol {
             player.resetBet();
         }
     }
-    //te komnikaty spakować do Stringa / czy to zrobisz osobną metodę czy aktualziacja poprzez aktualizacje pola dla obietku gracz
-
-    //    private void getAllowedActions(Gracz player, int akcja) {
-    // int obiekt/enum 1 = AllIn
     private void getAllowedActions(Gracz player) {
-        System.out.println("***"+player.getName()+" you have "+player.getCash()+"$.***");
+//        System.out.println("***"+player.getName()+" you have "+player.getCash()+"$.***");
         if (player.getAction().equals(Action.SMALL_BLIND)){
             System.out.println(player.getName() + " what you want to do:\n 1-AllIn \n 2-Raise \n 3-Call \n 4-Fold ");
-
-            akcjaGracza = scanner.nextInt();
-//            akcjaGracza = player.getChoosenAction();
+//            akcjaGracza = scanner.nextInt();
+            akcjaGracza = player.getChoosenAction();
             switch (akcjaGracza) {
                 case 1:
                     int wartosc0 = player.getCash();
@@ -308,7 +303,8 @@ public class Stol {
                     break;
                 case 2:
                     System.out.println("Enter the raise value");
-                    wartoscRiseBet = scanner.nextInt();
+//                    wartoscRiseBet = scanner.nextInt();
+                    wartoscRiseBet = player.getBetRiseValue();
                     player.setAction(new RaiseAction(wartoscRiseBet));
                     break;
                 case 3:
@@ -323,8 +319,8 @@ public class Stol {
             if (pattern.matcher(poprzedniaAkcja.toString()).matches()){
                 System.out.println(player.getName() + " what you want to do:\n 1-AllIn \n 2-Raise \n 3-Call \n 4-Fold ");
                 System.out.println(poprzedniaAkcja.toString()+ "tuuu");
-                akcjaGracza = scanner.nextInt();
-//              akcjaGracza = player.getChoosenAction();
+//                akcjaGracza = scanner.nextInt();
+                akcjaGracza = player.getChoosenAction();
                 switch (akcjaGracza) {
                     case 1:
                         int wartosc0 = player.getCash();
@@ -332,7 +328,8 @@ public class Stol {
                         break;
                     case 2:
                         System.out.println("Enter the raise value");
-                        wartoscRiseBet = scanner.nextInt();
+//                        wartoscRiseBet = scanner.nextInt();
+                        wartoscRiseBet = player.getBetRiseValue();
                         player.setAction(new RaiseAction(wartoscRiseBet));
                         break;
                     case 3:
@@ -344,8 +341,8 @@ public class Stol {
                 }
             }else {
                 System.out.println(player.getName() + " what you want to do:\n 1-AllIn \n 2-Raise \n 3-Check \n 4-Fold ");
-                akcjaGracza = scanner.nextInt();
-//              akcjaGracza = player.getChoosenAction();
+//                akcjaGracza = scanner.nextInt();
+                akcjaGracza = player.getChoosenAction();
                 switch (akcjaGracza) {
                     case 1:
                         int wartosc0 = player.getCash();
@@ -353,7 +350,8 @@ public class Stol {
                         break;
                     case 2:
                         System.out.println("Enter the raise value");
-                        wartoscRiseBet = scanner.nextInt();
+//                        wartoscRiseBet = scanner.nextInt();
+                        wartoscRiseBet = player.getBetRiseValue();
                         player.setAction(new RaiseAction(wartoscRiseBet));
                         break;
                     case 3:
@@ -367,8 +365,8 @@ public class Stol {
         }else if (patternBET.matcher(poprzedniaAkcja.toString()).matches()) {
             System.out.println(poprzedniaAkcja.toString()+"POPRZEDNIA AKCJA - bet"+ " stawka"+stawka);
             System.out.println(player.getName() + " what you want to do:\n 1-AllIn \n 2-Raise \n 3-Call \n 4-Fold ");
-            akcjaGracza = scanner.nextInt();
-//            akcjaGracza = player.getChoosenAction();
+//            akcjaGracza = scanner.nextInt();
+            akcjaGracza = player.getChoosenAction();
             switch (akcjaGracza) {
                 case 1:
                     int wartosc0 = actor.getCash();
@@ -376,7 +374,8 @@ public class Stol {
                     break;
                 case 2:
                     System.out.println("Enter the raise value");
-                    wartoscRiseBet = scanner.nextInt();
+//                    wartoscRiseBet = scanner.nextInt();
+                    wartoscRiseBet = player.getBetRiseValue();
                     while (wartoscRiseBet<poprzedniaAkcja.getAmount()){
                         System.out.println("There was bet for:"+poprzedniaAkcja.getAmount()+" , raise must be higher.Enter the raise value");
                         wartoscRiseBet = scanner.nextInt();
@@ -393,8 +392,8 @@ public class Stol {
         }else if (pattern.matcher(poprzedniaAkcja.toString()).matches()){
             System.out.println(poprzedniaAkcja.toString()+" POPRZEDNIA AKCJA - Raise"+ "stawka"+stawka);
             System.out.println(player.getName() + " what you want to do:\n 1-AllIn \n 2-Rerise \n 3-Call \n 4-Fold");
-            akcjaGracza = scanner.nextInt();
-//            akcjaGracza = player.getChoosenAction();
+//            akcjaGracza = scanner.nextInt();
+            akcjaGracza = player.getChoosenAction();
             switch (akcjaGracza) {
                 case 1:
                     int wartosc0 = actor.getCash();
@@ -402,7 +401,8 @@ public class Stol {
                     break;
                 case 2:
                     System.out.println("Enter the raise value");
-                    wartoscRiseBet = scanner.nextInt();
+//                    wartoscRiseBet = scanner.nextInt();
+                    wartoscRiseBet = player.getBetRiseValue();
                     player.setAction(new RaiseAction(wartoscRiseBet));
                     break;
                 case 3:
@@ -415,8 +415,8 @@ public class Stol {
         }else if (poprzedniaAkcja.toString().equals("Check")) {
             System.out.println(poprzedniaAkcja.toString()+" POPRZEDNIA AKCJA - call lub check");
             System.out.println(player.getName() + " what you want to do:\n 1-AllIn \n 2-Bet \n 3-Check \n 4-Fold");
-            akcjaGracza = scanner.nextInt();
-//            akcjaGracza = player.getChoosenAction();
+//            akcjaGracza = scanner.nextInt();
+            akcjaGracza = player.getChoosenAction();
             switch (akcjaGracza) {
                 case 1:
                     int wartosc0 = actor.getCash();
@@ -424,7 +424,8 @@ public class Stol {
                     break;
                 case 2:
                     System.out.println("Enter the bet value");
-                    wartoscRiseBet = scanner.nextInt();
+//                    wartoscRiseBet = scanner.nextInt();
+                    wartoscRiseBet = player.getBetRiseValue();
                     player.setAction(new BetAction(wartoscRiseBet));
                     break;
                 case 3:
@@ -436,8 +437,8 @@ public class Stol {
             }
         }else if (poprzedniaAkcja.toString().equals("Call") && !player.getAction().equals(Action.BIG_BLIND))   {
             System.out.println(player.getName() + " what you want to do:\n 1-AllIn \n 2-Bet \n 3-Call \n 4-Fold");
-            akcjaGracza = scanner.nextInt();
-//            akcjaGracza = player.getChoosenAction();
+//            akcjaGracza = scanner.nextInt();
+            akcjaGracza = player.getChoosenAction();
             switch (akcjaGracza) {
                 case 1:
                     int wartosc0 = actor.getCash();
@@ -445,7 +446,8 @@ public class Stol {
                     break;
                 case 2:
                     System.out.println("Enter the bet value");
-                    wartoscRiseBet = scanner.nextInt();
+//                    wartoscRiseBet = scanner.nextInt();
+                    wartoscRiseBet = player.getBetRiseValue();
                     player.setAction(new BetAction(wartoscRiseBet));
                     break;
                 case 3:
@@ -455,11 +457,10 @@ public class Stol {
                     player.setAction(Action.FOLD);
                     break;
             }
-
         }else if (player.getAction().toString().equals("Continue")) {
             System.out.println(player.getName() + " what you want to do:\n 1-AllIn \n 2-Raise \n 3-Call \n 4-Fold ");
-            akcjaGracza = scanner.nextInt();
-//            akcjaGracza = player.getChoosenAction();
+//            akcjaGracza = scanner.nextInt();
+            akcjaGracza = player.getChoosenAction();
             switch (akcjaGracza) {
                 case 1:
                     int wartosc0 = actor.getCash();
@@ -467,7 +468,8 @@ public class Stol {
                     break;
                 case 2:
                     System.out.println("Enter the raise value");
-                    wartoscRiseBet = scanner.nextInt();
+//                    wartoscRiseBet = scanner.nextInt();
+                    wartoscRiseBet = player.getBetRiseValue();
                     while (wartoscRiseBet <poprzedniaAkcja.getAmount()) {
                         System.out.println("There was bet for:" + poprzedniaAkcja.getAmount() + " , raise must be higher.Enter the raise value");
                         wartoscRiseBet = scanner.nextInt();
@@ -483,8 +485,8 @@ public class Stol {
             }
         }else{
             System.out.println(player.getName() + " what you want to do:\n 1-AllIn \n 2-Raise \n 3-Call/Check \n 4-Fold ");
-            akcjaGracza = scanner.nextInt();
-//            akcjaGracza = player.getChoosenAction();
+//            akcjaGracza = scanner.nextInt();
+            akcjaGracza = player.getChoosenAction();
             switch (akcjaGracza) {
                 case 1:
                     int wartosc0 = actor.getCash();
@@ -492,7 +494,8 @@ public class Stol {
                     break;
                 case 2:
                     System.out.println("Enter the raise value");
-                    wartoscRiseBet = scanner.nextInt();
+//                    wartoscRiseBet = scanner.nextInt();
+                    wartoscRiseBet = player.getBetRiseValue();
                     while (wartoscRiseBet < poprzedniaAkcja.getAmount()) {
                         System.out.println("There was bet for:" + poprzedniaAkcja.getAmount() + " , raise must be higher.Enter the raise value");
                         wartoscRiseBet = scanner.nextInt();
@@ -509,8 +512,6 @@ public class Stol {
         }
         System.out.println(actor.getName() +" " + actor.getAction());
     }
-
-
     private void contributePot(int amount) {
         for (Pot pot : pots) {
             if (!pot.hasContributer(actor)) {
@@ -533,7 +534,7 @@ public class Stol {
             pots.add(pot);
         }
     }
-    private void doShowdown() {
+    public void doShowdown() {
         List<Gracz> showingPlayers = new ArrayList<>();
         for (Pot pot : pots) {
             for (Gracz contributor : pot.getContributors()) {
@@ -555,7 +556,6 @@ public class Stol {
             }
             pos = (pos + 1) % activePlayers.size();
         }
-
         boolean firstToShow = true;
         int bestHandValue = -1;
         for (Gracz playerToShow : showingPlayers) {
@@ -584,6 +584,8 @@ public class Stol {
             }
             if (doShow) {
                 System.out.println("\n" +playerToShow+ " has - " + handValue.getDescription() );
+                messageHand = "\n" +playerToShow+ " has - " + handValue.getDescription();
+                messageHandList.add(messageHand);
             } else {
                 playerToShow.setCards(null);
                 activePlayers.remove(playerToShow);
@@ -602,23 +604,24 @@ public class Stol {
             playerList.add(player);
             rankedPlayers.put(handValue, playerList);
         }
-
         int totalPot = getTotalPot();
         Map<Gracz, Integer> potDivision = new HashMap<>();
         for (Wartosc handValue : rankedPlayers.keySet()) {
             List<Gracz> winners = rankedPlayers.get(handValue);
-
             for (Pot pot : pots) {
-                int noOfWinnersInPot = 1; //TODO powinno być zero
+                int noOfWinnersInPot = 0;
                 for (Gracz winner : winners) {
-                    if (pot.getContributors().contains(winner)) {
-                        noOfWinnersInPot++;
+                    for (Gracz gr : pot.getContributors()) {
+                        if (gr.getName().equals(winner.getName())){
+                            noOfWinnersInPot++;
+                        }
                     }
                 }
                 if (noOfWinnersInPot > 0) {
+                    System.out.println("WCHODZI TUTAJ?????????");
                     int potShare = pot.getValue() / noOfWinnersInPot;
                     for (Gracz winner : winners) {
-                        if (pot.hasContributer(winner)) { //TODO if (pot.hasContributer(winner))
+                        if (pot.hasContributer(winner)) {
                             potDivision.merge(winner, potShare, Integer::sum);
                         }
                     }
@@ -638,9 +641,7 @@ public class Stol {
                     pot.clear();
                 }
             }
-
         }
-
         StringBuilder winnerText = new StringBuilder();
         int totalWon = 0;
         for (Gracz winner : potDivision.keySet()) {
@@ -651,6 +652,8 @@ public class Stol {
                 winnerText.append(", ");
             }
             System.out.println("\n**********" +winner.getName()+" with " + Arrays.toString(winner.getCards()) +" wins " + potShare + "$.**********\n" );
+            messageWinner = "**********" +winner.getName()+" with " + Arrays.toString(winner.getCards()) +" wins " + potShare + "$.**********\n";
+            messageWinnerList.add(messageWinner);
         }
         if (totalWon != totalPot) {
             throw new IllegalStateException("Incorrect pot division!");
@@ -726,6 +729,47 @@ public class Stol {
                 actor.setAction(Action.FOLD);
             }else {actor.setAction(Action.CHECK);}
         }
-
+    }
+    public String whatCanIDo(Gracz player){
+            if (player.getAction().equals(Action.SMALL_BLIND)){
+                System.out.println(player.getName() + " what you want to do:\n 1-AllIn \n 2-Raise \n 3-Call \n 4-Fold ");
+                messageWhatCanIDo ="***"+ player.getName() +" you have "+player.getCash()+"$***\n"+ player.getName() +
+                        " what you want to do:\n 1-AllIn \n 2-Raise \n 3-Call \n 4-Fold " ;
+            }else if (player.getAction().equals(Action.BIG_BLIND)){
+                if (pattern.matcher(poprzedniaAkcja.toString()).matches()){
+                    System.out.println(player.getName() + " what you want to do:\n 1-AllIn \n 2-Raise \n 3-Call \n 4-Fold ");
+                    messageWhatCanIDo ="***"+ player.getName() +" you have "+player.getCash()+"$***\n"+ player.getName() +
+                            " what you want to do:\n 1-AllIn \n 2-Raise \n 3-Call \n 4-Fold ";
+                }else {
+                    System.out.println(player.getName() + " what you want to do:\n 1-AllIn \n 2-Raise \n 3-Check \n 4-Fold ");
+                    messageWhatCanIDo ="***"+ player.getName() +" you have "+player.getCash()+"$***\n"+ player.getName() +
+                            " what you want to do:\n 1-AllIn \n 2-Raise \n 3-Check \n 4-Fold ";
+                }
+            }else if (patternBET.matcher(poprzedniaAkcja.toString()).matches()) {
+                System.out.println(player.getName() + " what you want to do:\n 1-AllIn \n 2-Raise \n 3-Call \n 4-Fold ");
+                messageWhatCanIDo ="***"+ player.getName() +" you have "+player.getCash()+"$***\n"+ player.getName() +
+                        " what you want to do:\n 1-AllIn \n 2-Raise \n 3-Call \n 4-Fold ";
+            }else if (pattern.matcher(poprzedniaAkcja.toString()).matches()){
+                System.out.println(player.getName() + " what you want to do:\n 1-AllIn \n 2-Rerise \n 3-Call \n 4-Fold");
+                messageWhatCanIDo ="***"+ player.getName() +" you have "+player.getCash()+"$***\n"+ player.getName() +
+                        " what you want to do:\n 1-AllIn \n 2-Rerise \n 3-Call \n 4-Fold";
+            }else if (poprzedniaAkcja.toString().equals("Check")) {
+                System.out.println(player.getName() + " what you want to do:\n 1-AllIn \n 2-Bet \n 3-Check \n 4-Fold");
+                messageWhatCanIDo ="***"+ player.getName() +" you have "+player.getCash()+"$***\n"+ player.getName() +
+                        " what you want to do:\n 1-AllIn \n 2-Bet \n 3-Check \n 4-Fold";
+            }else if (poprzedniaAkcja.toString().equals("Call") && !player.getAction().equals(Action.BIG_BLIND))   {
+                System.out.println(player.getName() + " what you want to do:\n 1-AllIn \n 2-Bet \n 3-Call \n 4-Fold");
+                messageWhatCanIDo ="***"+ player.getName() +" you have "+player.getCash()+"$***\n"+ player.getName() +
+                        " what you want to do:\n 1-AllIn \n 2-Bet \n 3-Call \n 4-Fold";
+            }else if (player.getAction().toString().equals("Continue")) {
+                System.out.println(player.getName() + " what you want to do:\n 1-AllIn \n 2-Raise \n 3-Call \n 4-Fold ");
+                messageWhatCanIDo ="***"+ player.getName() +" you have "+player.getCash()+"$***\n"+ player.getName() +
+                        " what you want to do:\n 1-AllIn \n 2-Raise \n 3-Call \n 4-Fold ";
+            }else{
+                System.out.println(player.getName() + " what you want to do:\n 1-AllIn \n 2-Raise \n 3-Call/Check \n 4-Fold ");
+                messageWhatCanIDo ="***"+ player.getName() +" you have "+player.getCash()+"$***\n"+ player.getName() +
+                        " what you want to do:\n 1-AllIn \n 2-Raise \n 3-Call/Check \n 4-Fold ";
+            }
+        return messageWhatCanIDo;
     }
 }

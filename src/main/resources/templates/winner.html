@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Texas Hold'em</title>
+</head>
+<body bgcolor="#99CC30">
+<hr>
+<div style="text-align: center;">
+        <span style="font-family: Arial; font-size: xx-large; color: #6C6C6C; ">
+            <p th:text="${handValue}"></p><br>
+            <p th:text="${winner}"></p><br>
+            <p th:if="${thanks}!=null" th:text="${thanks}"></p><br>
+            <p th:if="${over}!=null" th:text="${over}"></p><br>
+            <form method="post" th:action="@{/newHand}" th:object="${userRequest}" >
+                <input type="submit" th:value="NewHand" name="NewHand" style="width: 150px; background-color: cornflowerblue">
+            </form>
+            <hr>
+        </span>
+</div>
+</body>
+</html>
