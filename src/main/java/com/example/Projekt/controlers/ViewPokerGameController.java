@@ -1,20 +1,20 @@
 package com.example.Projekt.controlers;
-
 import com.example.Projekt.UserRequestIndex;
 import com.example.Projekt.UserRequestView;
 import com.example.Projekt.actions.Action;
 import com.example.Projekt.actions.ContinueAction;
 import com.example.Projekt.rozgrywka.Gracz;
 import com.example.Projekt.rozgrywka.Stol;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
 @Controller
+@RequiredArgsConstructor
 public class ViewPokerGameController {
     private Stol stol = new Stol(10);
     private Gracz gracz1;
