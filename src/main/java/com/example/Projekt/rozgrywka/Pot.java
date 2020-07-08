@@ -1,6 +1,8 @@
 package com.example.Projekt.rozgrywka;
 
 
+//import com.sun.org.apache.xpath.internal.operations.Bool;
+
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -11,7 +13,7 @@ public class Pot {
     public final Set<Gracz> contributors;
     public Pot(int bet) {
         this.bet = bet;
-        contributors = new HashSet<Gracz>();
+        contributors = new HashSet<>();
     }
     public int getBet() {
         return bet;
@@ -23,7 +25,13 @@ public class Pot {
         contributors.add(player);
     }
     public boolean hasContributer(Gracz player) {
-        return contributors.contains(player);
+        //albo equals dla gracza
+        for (Gracz gracz : contributors) {
+            if(gracz.getName().equals(player.getName())) {
+                return Boolean.TRUE;
+            }
+        }
+        return Boolean.FALSE;
     }
     public int getValue() {
         return bet * contributors.size();

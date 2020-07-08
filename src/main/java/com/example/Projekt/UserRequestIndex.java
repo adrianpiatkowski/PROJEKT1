@@ -7,4 +7,5 @@ import org.springframework.stereotype.Service;
 public class UserRequestIndex {
     private String name;
     private Integer noOfBots;
+    private Integer choosenAction;
 }

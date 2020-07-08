@@ -14,6 +14,9 @@ public class Gracz {
     private boolean maKarty;
     private Action action;
     private int bet;
+//    private PlayerAction playerAction;
+    private int choosenAction = -1;
+
     public Gracz(String name, int cash, String ifBot) {
         this.name = name;
         this.cash = cash;
@@ -38,10 +41,17 @@ public class Gracz {
                 maKarty = true;
                 System.out.format("==== %s's cards:\t%s ====\n", name, kartyGracza);
 
+
             } else {
                 throw new IllegalArgumentException("Invalid number of cards");
             }
         }
+        String wyswietlanieKart = "====" +
+                name +
+                "'s cards: \t" +
+                kartyGracza +
+                "====\n";
+        System.out.println(wyswietlanieKart);
     }
     public boolean maKarty() { return maKarty;}
     public String getName() {
