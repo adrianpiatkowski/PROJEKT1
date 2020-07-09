@@ -14,8 +14,8 @@
             <p th:if="${currentAction}!=null" th:text="${currentAction}"></p><br>
             <p th:text="${whatToDo}"></p><br>
             <form method="post" th:action="@{/winner}" th:object="${userRequestAfterRiver}" >
-                <input  type="text" th:field="*{choosenAction}" placeholder="selected action">
-                <input  type="text" th:field="*{valueRiseBet}" placeholder="enter bet value">
+                <input  type="text" pattern="[1-4]+"  th:field="*{choosenAction}" placeholder="selected action">
+                <input  type="text" pattern="[10-4500]+" th:field="*{valueRiseBet}" placeholder="enter bet value">
                 <input type="submit" th:value="select3" name="Select" style="width: 150px; background-color: cornflowerblue">
             </form>
             <hr>

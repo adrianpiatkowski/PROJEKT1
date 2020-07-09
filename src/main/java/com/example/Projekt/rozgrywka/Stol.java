@@ -561,9 +561,7 @@ public class Stol {
         for (Gracz playerToShow : showingPlayers) {
             KartyGracza hand = new KartyGracza(board);
             hand.addKarty(playerToShow.getCards());
-
             Wartosc handValue = new Wartosc(hand);
-
             boolean doShow = ALWAYS_CALL_SHOWDOWN;
             if (!doShow) {
                 if (playerToShow.isAllIn()) {
@@ -618,7 +616,6 @@ public class Stol {
                     }
                 }
                 if (noOfWinnersInPot > 0) {
-                    System.out.println("WCHODZI TUTAJ?????????");
                     int potShare = pot.getValue() / noOfWinnersInPot;
                     for (Gracz winner : winners) {
                         if (pot.hasContributer(winner)) {

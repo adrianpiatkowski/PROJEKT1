@@ -11,7 +11,7 @@
             <p th:text="${welcome}"></p><br>
                         <form method="post" th:action="@{/viewPokerGame}" th:object="${userRequest}" >
                            <input  type="text" th:field="*{name}" placeholder="your name">
-                            <input  type="text" th:field="*{noOfBots}" placeholder="number of bots"><br>
+                            <input  type="text" pattern="[1-9]+" th:field="*{noOfBots}" placeholder="number of bots"><br>
                             <input type="submit" th:value="Start" name="start" style="width: 150px; background-color: cornflowerblue">
                         </form>
                         <hr>
